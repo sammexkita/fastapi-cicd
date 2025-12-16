@@ -1,6 +1,6 @@
 services:
   fastapi:
-    image: fastapi:0.0.1
+    image: sammexkita/fastapi:latest
     restart: unless-stopped
     deploy:
       mode: replicated

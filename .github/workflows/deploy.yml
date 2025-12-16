@@ -29,22 +29,15 @@ jobs:
           push: true
           tags: sammexkita/fastapi:latest
       
-      - name: Copy docker-compose.yml to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.HETZNER_IP }}
-          username: ${{ secrets.HETZNER_USER }}
-          password: ${{ secrets.HETZNER_PASSWORD }}
-          source: "docker-compose.yml"
-          target: "/root/fastapi/"
-      
-      - name: Deploy to server
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.HETZNER_IP }}
-          username: ${{ secrets.HETZNER_USER }}
-          password: ${{ secrets.HETZNER_PASSWORD }}
-          script: |
-            cd /root/fastapi
-            docker pull sammexkita/fastapi:latest
-            docker stack deploy -c docker-compose.yml fastapi
+      - name: Deploy stack via Portainer API
+        run: |
+          STACK_FILE=$(cat docker-compose.yml | jq -Rs .)
+          
+          curl -X POST "https://manager.clickmix.digital/api/stacks/create/swarm/string?endpointId=1" \
+            -H "X-API-Key: ${{ secrets.PORTAINER_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"name\": \"fastapi\",
+              \"stackFileContent\": $STACK_FILE,
+              \"swarmID\": \"\"
+            }"
