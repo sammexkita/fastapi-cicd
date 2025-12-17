@@ -33,7 +33,7 @@ jobs:
         run: |
           STACK_FILE=$(cat docker-compose.yml | jq -Rs .)
           
-          curl -X POST "https://manager.clickmix.digital/api/stacks/create/swarm/string?endpointId=1" \
+          curl -X POST "https://${{ secrets.PORTAINER_URL }}/api/stacks/create/swarm/string?endpointId=1" \
             -H "X-API-Key: ${{ secrets.PORTAINER_TOKEN }}" \
             -H "Content-Type: application/json" \
             -d "{
