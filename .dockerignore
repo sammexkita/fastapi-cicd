@@ -1,0 +1,11 @@
+.github/
+__pycache__/
+dev/
+.DS_Store
+*.log
+*.md
+.gitignore
+env/
+venv/
+.venv/
+README.md
